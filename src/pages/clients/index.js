@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { HomeIcon, QuestionMarkCircleIcon } from "@heroicons/react/solid";
 import { Col, Row, Card, Button, Form, Breadcrumb } from 'react-bootstrap';
@@ -11,9 +11,12 @@ import jobs from "data/jobs";
 import { Routes } from "routes";
 import { FaPlus, FaPlusCircle } from "react-icons/fa";
 import { IoMenu } from "react-icons/io5";
+import NewClient from "./newClient";
 
 export default function ClientsPage() {
     const history = useHistory();
+    
+    const [showNewClient, setShowNewClient] = useState(false);
 
     const columns = [
         { dataField: "id", text: "ID", hidden: true },
@@ -29,9 +32,6 @@ export default function ClientsPage() {
         },
     ];
 
-    const goToDatatablesDocs = () => {
-        history.push(Routes.PluginDatatable.path);
-    };
 
     const customTotal = (from, to, size) => (
         <div>
@@ -85,7 +85,9 @@ export default function ClientsPage() {
                                     10 de 30 Registros
                                 </div>
                             <div>
-                                <Button variant="outline-gray-600" className="d-inline-flex align-items-center w-100" onClick={goToDatatablesDocs}>
+                                <Button 
+                                variant="outline-gray-600" 
+                                className="d-inline-flex align-items-center w-100" onClick={setShowNewClient}>
                                     <FaPlusCircle className="icon icon-xs me-2" /> Adicionar novo cliente
                                 </Button>
                             </div>
@@ -141,6 +143,7 @@ export default function ClientsPage() {
                     </PaginationProvider>
                 )}
             </ToolkitProvider>
+            <NewClient show={showNewClient} onClose={() => setShowNewClient(null)}/>
         </>
     );
 };

@@ -9,7 +9,7 @@ import { LogoutIcon } from "@heroicons/react/outline";
 import { Nav, Badge, Image, Button, Dropdown, Navbar, Collapse, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import { FaUsers } from "react-icons/fa"
+import { FaUserShield, FaUsers, FaUsersCog } from "react-icons/fa"
 
 import { Routes } from "routes";
 import ReactHero from "assets/img/technologies/react-hero-logo.svg";
@@ -151,6 +151,7 @@ export default (props = {}) => {
                 <NavItem title="Product Analysis" link={Routes.DashboardProductAnalysis.path} />
               </CollapsableNavItem>
               <NavItem title="Clientes" icon={FaUsers} link={Routes.Clients.path} />
+              <NavItem title="Usuários" icon={FaUsersCog} link={Routes.Billing.path} />
               {/* 
               <NavItem title="Kanban" icon={ViewGridIcon} link={Routes.Kanban.path} />
               <NavItem title="Messages" icon={InboxIcon} badgeText="4" badgeBg="danger" link={Routes.Messages.path} />
