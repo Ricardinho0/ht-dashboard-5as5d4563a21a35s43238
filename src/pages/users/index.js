@@ -1,25 +1,27 @@
 
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { HomeIcon, QuestionMarkCircleIcon } from "@heroicons/react/solid";
+import { HomeIcon } from "@heroicons/react/solid";
 import { Col, Row, Card, Button, Form, Breadcrumb } from 'react-bootstrap';
 import Table from "react-bootstrap-table-next";
 import Pagination, { PaginationListStandalone, PaginationProvider, PaginationTotalStandalone, SizePerPageDropdownStandalone } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 
-import { Routes } from "routes";
-import { FaPlus, FaPlusCircle } from "react-icons/fa";
+import jobs from "data/jobs";
+import {  FaPlusCircle } from "react-icons/fa";
 import { IoMenu } from "react-icons/io5";
-import NewClient from "./newClient";
+import NewUser from "pages/users/new";
 import { UserService } from "service/users";
 import useAuth from "context/auth";
+import { Routes } from "routes";
 
-export default function ClientsPage() {
-    const history = useHistory();
+export default function UsersPage() {
+
     const { user } = useAuth();
 
+    const history = useHistory();
+    
     const [showNewClient, setShowNewClient] = useState(false);
-
     const [users, setUsers] = useState([]);
 
     const columns = [
@@ -32,7 +34,7 @@ export default function ClientsPage() {
             dataField: "id", text: "Ação",
             formatter: (cell, data) => <Button className="p-1" 
             onClick={() => history.push({
-                pathname: Routes.Clients.details,
+                pathname: Routes.Users.details,
                 state: data
             })}
             variant=""> <IoMenu size={22} /></Button>, align: 'start'
@@ -40,24 +42,19 @@ export default function ClientsPage() {
     ];
 
 
-    useEffect(() => {
-        if(user){
-            ListUsers();
-        }
-    },[user])
-
-    const ListUsers = () => {
-        UserService.listResales(user?.id_revenda)
-        .then(({ data }) => {
-            setUsers(data)
-        })
-    }
-
     const customTotal = (from, to, size) => (
         <div>
             {from} - {to} de {size} Clientes
         </div>
     );
+
+    useEffect(() => {
+        UserService.listContributor(user?.id_contribuinte)
+        .then(({ data }) => {
+            setUsers(data)
+        })
+    },[])
+
 
     const customSizePerPage = (props) => {
         const { options, currentSizePerPage, onSizePerPageChange } = props;
@@ -90,25 +87,25 @@ export default function ClientsPage() {
             <div className="py-4">
                 <Breadcrumb className="d-none d-md-inline-block" listProps={{ className: "breadcrumb-dark breadcrumb-transparent" }}>
                     <Breadcrumb.Item><HomeIcon className="icon icon-xs" /></Breadcrumb.Item>
-                    <Breadcrumb.Item active>Clientes</Breadcrumb.Item>
+                    <Breadcrumb.Item active>Usuários </Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="d-flex justify-content-between w-100 flex-wrap">
                     <div className="mb-3 mb-lg-0">
-                        <h4>Lista de cliente</h4>
+                        <h4>Lista de usuários</h4>
                         <p className="mb-0">
-                            Dados essenciais sobre os clientes.
+                            Dados essenciais sobre os usuários.
                         </p>
                     </div>
                     <div>
                         <div className="d-inline-flex align-items-center gap-4">
                                 <div>
-                                    {users?.length} de {users?.length} Registros
+                                    10 de 30 Registros
                                 </div>
                             <div>
                                 <Button 
                                 variant="outline-gray-600" 
                                 className="d-inline-flex align-items-center w-100" onClick={setShowNewClient}>
-                                    <FaPlusCircle className="icon icon-xs me-2" /> Adicionar novo cliente
+                                    <FaPlusCircle className="icon icon-xs me-2" /> Adicionar novo usuário
                                 </Button>
                             </div>
                         </div>
@@ -129,7 +126,7 @@ export default function ClientsPage() {
                             custom: true,
                             showTotal: true,
                             alwaysShowAllBtns: true,
-                            totalSize: users?.length ?? 0,
+                            totalSize: jobs.length,
                             withFirstAndLast: false,
                             paginationTotalRenderer: customTotal,
                             sizePerPageRenderer: customSizePerPage
@@ -163,12 +160,7 @@ export default function ClientsPage() {
                     </PaginationProvider>
                 )}
             </ToolkitProvider>
-            <NewClient show={showNewClient} onClose={(created) => {
-                if(created){
-                    ListUsers();
-                }
-                setShowNewClient(null)    
-            }}/>
+            <NewUser show={showNewClient} onClose={() => setShowNewClient(null)}/>
         </>
     );
 };

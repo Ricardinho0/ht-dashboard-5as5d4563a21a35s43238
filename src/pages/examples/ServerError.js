@@ -21,7 +21,7 @@ export default () => {
               <p className="lead my-4">
                 It's always time for a coffee break. We should be back by the time you finish your coffee.
               </p>
-              <Button as={Link} variant="gray-800" className="d-inline-flex align-items-center justify-content-center mb-4" to={Routes.DashboardOverview.path}>
+              <Button as={Link} variant="gray-800" className="d-inline-flex align-items-center justify-content-center mb-4" to={Routes.Clients.path}>
                 <ChevronLeftIcon className="icon icon-xs me-2" />
                 Go back home
               </Button>

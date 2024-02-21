@@ -30,7 +30,7 @@ export default [
         "id": uuidv4(),
         "name": "Overview",
         "image": OverviewImg,
-        "link": Routes.DashboardOverview.path
+        "link": Routes.Clients.path
     },
     {
         "id": uuidv4(),

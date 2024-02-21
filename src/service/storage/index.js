@@ -20,7 +20,7 @@ export default class StorageService {
         const user = localStorage.getItem(Utils.storageLocales.HTRtoken)
         if(user){
             const user_json = JSON.parse(user)
-            return user_json?.access
+            return user_json?.access_token
         }
         return null
     }

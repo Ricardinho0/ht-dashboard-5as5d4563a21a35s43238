@@ -17,7 +17,7 @@ export default () => {
           <Row>
             <Col xs={12} className="text-center d-flex align-items-center justify-content-center">
               <div>
-                <Card.Link as={Link} to={Routes.DashboardOverview.path}>
+                <Card.Link as={Link} to={Routes.Clients.path}>
                   <Image src={NotFoundImage} className="img-fluid w-75" />
                 </Card.Link>
                 <h1 className="mt-5">
@@ -27,7 +27,7 @@ export default () => {
                   Oops! Looks like you followed a bad link. If you think this is a
                   problem with us, please tell us.
                 </p>
-                <Button as={Link} variant="gray-800" className="d-inline-flex align-items-center justify-content-center mb-4" to={Routes.DashboardOverview.path}>
+                <Button as={Link} variant="gray-800" className="d-inline-flex align-items-center justify-content-center mb-4" to={Routes.Clients.path}>
                   <ChevronLeftIcon className="icon icon-xs me-2" />
                   Go back home
                 </Button>

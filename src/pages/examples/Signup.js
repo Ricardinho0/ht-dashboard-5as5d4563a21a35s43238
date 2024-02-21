@@ -15,7 +15,7 @@ export default () => {
       <section className="vh-lg-100 mt-5 mt-lg-0 bg-soft d-flex align-items-center">
         <Container>
           <p className="text-center">
-            <Card.Link as={Link} to={Routes.DashboardOverview.path} className="d-flex align-items-center justify-content-center">
+            <Card.Link as={Link} to={Routes.Clients.path} className="d-flex align-items-center justify-content-center">
               <ArrowNarrowLeftIcon className="icon icon-xs me-2" /> Back to homepage
             </Card.Link>
           </p>

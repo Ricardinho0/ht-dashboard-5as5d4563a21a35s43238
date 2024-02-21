@@ -17,10 +17,14 @@ export const AuthProvider = ({ children }) => {
 
     });
 
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState(() => {
+        const current_user = StorageService.getUser()
+        return current_user?.user ?? null
+    })
 
     const Authenticate = (data) => {
         seToken(data)
+        setUser(data?.user)
         StorageService.saveToken(data)
     }
 

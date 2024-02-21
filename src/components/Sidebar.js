@@ -19,7 +19,6 @@ export default (props = {}) => {
   const location = useLocation();
   const { pathname } = location;
   const [show, setShow] = useState(false);
-  const [collapsedItems, setCollapsedItems] = useState([pathname]);
   const contracted = props.contracted ? "contracted" : "";
   const showClass = show ? "show" : "";
 
@@ -27,46 +26,7 @@ export default (props = {}) => {
   const onMouseEnter = () => props.onMouseEnter && props.onMouseEnter();
   const onMouseLeave = () => props.onMouseLeave && props.onMouseLeave();
 
-  const onNavItemCollapse = (itemKey) => {
-    const isCollapsed = collapsedItems.some(item => item.includes(itemKey));
-    const newCollapsedItems = isCollapsed ? collapsedItems.filter(item => !item.includes(itemKey)) : [...collapsedItems, itemKey];
-    setCollapsedItems(newCollapsedItems);
-  };
-
   const events = isMobile ? {} : { onMouseEnter, onMouseLeave };
-
-  const CollapsableNavItem = (props) => {
-    const { eventKey, title, icon: NavItemIcon, children = null } = props;
-    const isOpened = collapsedItems.some(item => item.includes(eventKey));
-
-    return (
-      <Nav.Item>
-        <Nav.Link
-          onClick={() => onNavItemCollapse(eventKey)}
-          aria-expanded={isOpened}
-          aria-controls={eventKey}
-          className="d-flex justify-content-between align-items-center"
-        >
-          <span>
-            <span className="sidebar-icon">
-              <NavItemIcon className="icon icon-xs me-2" />
-            </span>
-            <span className="sidebar-text">
-              {title}
-            </span>
-          </span>
-          <span className="link-arrow">
-            <ChevronRightIcon className="icon icon-sm" />
-          </span>
-        </Nav.Link>
-        <Collapse in={isOpened} className="multi-level">
-          <div id={eventKey}>
-            {children}
-          </div>
-        </Collapse>
-      </Nav.Item>
-    );
-  };
 
   const NavItem = (props) => {
     const { title, link, target, icon: NavItemIcon, image, badgeText, badgeBg, badgeColor = "white" } = props;
@@ -107,7 +67,7 @@ export default (props = {}) => {
   return (
     <>
       <Navbar as={Col} xs={12} expand={false} collapseOnSelect variant="dark" className="navbar-theme-primary px-4 d-lg-none">
-        <Navbar.Brand as={Link} to={Routes.DashboardOverview.path} className="me-lg-5">
+        <Navbar.Brand as={Link} to={Routes.Clients.path} className="me-lg-5">
           <Image src={ReactHero} className="navbar-brand-dark" />
         </Navbar.Brand>
         <div className="d-flex align-items-center">
@@ -144,40 +104,8 @@ export default (props = {}) => {
               </div>
             </div>
             <Nav className="flex-column pt-3 pt-md-0">
-
-              <CollapsableNavItem eventKey="dashboard/" title="Dashboard" icon={ChartBarIcon}>
-                <NavItem title="Overview" link={Routes.DashboardOverview.path} />
-                <NavItem title="All Traffic" link={Routes.DashboardTraffic.path} />
-                <NavItem title="Product Analysis" link={Routes.DashboardProductAnalysis.path} />
-              </CollapsableNavItem>
               <NavItem title="Clientes" icon={FaUsers} link={Routes.Clients.path} />
-              <NavItem title="Usuários" icon={FaUsersCog} link={Routes.Billing.path} />
-              {/* 
-              <NavItem title="Kanban" icon={ViewGridIcon} link={Routes.Kanban.path} />
-              <NavItem title="Messages" icon={InboxIcon} badgeText="4" badgeBg="danger" link={Routes.Messages.path} />
-              <NavItem title="Users List" icon={UsersIcon} link={Routes.Users.path} />
-              <NavItem title="Transactions" icon={CreditCardIcon} link={Routes.Transactions.path} />
-              <NavItem title="Task List" icon={ClipboardListIcon} link={Routes.Tasks.path} />
-              <NavItem title="Settings" icon={CogIcon} link={Routes.Settings.path} />
-              <NavItem title="Calendar" icon={CalendarIcon} link={Routes.Calendar.path} />
-              <NavItem title="Map" icon={LocationMarkerIcon} link={Routes.Map.path} />
-
-              <CollapsableNavItem eventKey="tables/" title="Tables" icon={TableIcon}>
-                <NavItem title="DataTables" link={Routes.Datatables.path} />
-                <NavItem title="Bootstrap Tables" link={Routes.BootstrapTables.path} />
-              </CollapsableNavItem>
-              <CollapsableNavItem eventKey="examples/" title="Page Examples" icon={NewspaperIcon}>
-                <NavItem title="Pricing" link={Routes.Pricing.path} />
-                <NavItem title="Billing" link={Routes.Billing.path} />
-                <NavItem title="Invoice" link={Routes.Invoice.path} />
-                <NavItem title="Sign In" link={Routes.Signin.path} />
-                <NavItem title="Sign Up" link={Routes.Signup.path} />
-                <NavItem title="Forgot password" link={Routes.ForgotPassword.path} />
-                <NavItem title="Reset password" link={Routes.ResetPassword.path} />
-                <NavItem title="Lock" link={Routes.Lock.path} />
-                <NavItem title="404 Not Found" link={Routes.NotFound.path} />
-                <NavItem title="500 Server Error" link={Routes.ServerError.path} />
-              </CollapsableNavItem> */}
+              <NavItem title="Usuários" icon={FaUsersCog} link={Routes.Users.path} />
             </Nav>
           </div>
         </SimpleBar>

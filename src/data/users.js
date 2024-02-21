@@ -11,7 +11,7 @@ export default [
     {
         "id": uuidv4(),
         "image": Profile1,
-        "verified": true,
+        "phone": 74999990000,
         "status": "active",
         "name": "Roy Fendley",
         "email": "example@themesberg.com",
@@ -20,7 +20,7 @@ export default [
     {
         "id": uuidv4(),
         "image": Profile3,
-        "verified": true,
+        "phone": 74999990000,
         "status": "active",
         "name": "Bonnie Green",
         "email": "example@themesberg.com",
@@ -28,7 +28,7 @@ export default [
     },
     {
         "id": uuidv4(),
-        "verified": true,
+        "phone": 74999990000,
         "status": "active",
         "name": "Scott Anderson",
         "email": "example@themesberg.com",
@@ -36,7 +36,7 @@ export default [
     },
     {
         "id": uuidv4(),
-        "verified": true,
+        "phone": 74999990000,
         "status": "active",
         "image": Profile4,
         "name": "Ronnie Buchanan",
@@ -45,7 +45,7 @@ export default [
     },
     {
         "id": uuidv4(),
-        "verified": false,
+        "phone": 749885548768,
         "status": "inactive",
         "image": Profile3,
         "name": "Jane Rinehart",
@@ -54,7 +54,7 @@ export default [
     },
     {
         "id": uuidv4(),
-        "verified": false,
+        "phone": 749885548768,
         "status": "pending",
         "name": "William Ginther",
         "email": "example@themesberg.com",
@@ -63,7 +63,7 @@ export default [
     {
         "id": uuidv4(),
         "image": Profile2,
-        "verified": false,
+        "phone": 749885548768,
         "status": "pending",
         "name": "George Driskell",
         "email": "example@themesberg.com",
@@ -72,7 +72,7 @@ export default [
     {
         "id": uuidv4(),
         "image": Profile4,
-        "verified": false,
+        "phone": 749885548768,
         "status": "suspended",
         "name": "Ronnie Buchanan",
         "email": "example@themesberg.com",
@@ -80,7 +80,7 @@ export default [
     },
     {
         "id": uuidv4(),
-        "verified": false,
+        "phone": 749885548768,
         "status": "suspended",
         "name": "Jane Rinehart",
         "email": "example@themesberg.com",

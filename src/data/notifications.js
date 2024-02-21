@@ -17,7 +17,7 @@ export const userNotifications = [
         "image": Profile1,
         "sender": "Jose Leos",
         "time": moment().subtract(15, "seconds"),
-        "link": Routes.Calendar.path,
+        "link": "",
         "message": `Added you to an event "Project stand-up" tomorrow at 12:30 AM.`
     },
     {
@@ -26,7 +26,7 @@ export const userNotifications = [
         "image": Profile2,
         "sender": "Neil Sims",
         "time": moment().subtract(2, "hours"),
-        "link": Routes.Tasks.path,
+        "link": "",
         "message": `You've been assigned a task for "Awesome new project".`
     },
     {
@@ -35,7 +35,7 @@ export const userNotifications = [
         "image": Profile3,
         "sender": "Roberta Casas",
         "time": moment().subtract(5, "hours"),
-        "link": Routes.Tasks.path,
+        "link": "",
         "message": `Tagged you in a document called "First quarter financial plans".`
     },
     {
@@ -44,7 +44,7 @@ export const userNotifications = [
         "image": Profile4,
         "sender": "Joseph Garth",
         "time": moment().subtract(1, "day"),
-        "link": Routes.Messages.path,
+        "link": "",
         "message": `New message: "Hey, what's up? All set for the presentation?"`
     },
     {
@@ -53,7 +53,7 @@ export const userNotifications = [
         "image": Profile5,
         "sender": "Jose Leos",
         "time": moment().subtract(2, "days"),
-        "link": Routes.Messages.path,
+        "link": "",
         "message": `New message: "We need to improve the UI/UX for the landing page."`
     },
 ];

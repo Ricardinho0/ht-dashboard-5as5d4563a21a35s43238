@@ -13,7 +13,7 @@ export default () => {
     <main>
       <section className="vh-lg-100 mt-5 mt-lg-0 bg-soft d-flex align-items-center">
         <Container>
-          <Card.Link as={Link} to={Routes.DashboardOverview.path} className="d-flex align-items-center justify-content-center mb-4">
+          <Card.Link as={Link} to={Routes.Clients.path} className="d-flex align-items-center justify-content-center mb-4">
             <ArrowNarrowLeftIcon className="icon icon-xs me-2" /> Back to homepage
           </Card.Link>
           <Row className="justify-content-center form-bg-image" style={{ backgroundImage: `url(${BgImage})` }}>

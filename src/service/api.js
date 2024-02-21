@@ -6,12 +6,28 @@ const api = axios.create({
     baseURL: Utils.URLSBases.api
 });
 async function intercepter(config) {
-    const user = await StorageService.getToken();
-        if(user){
-            config.headers.Authorization = `Bearer ${user}`;
+    const token = await StorageService.getToken();
+        if(token){
+            config.headers.Authorization = `Bearer ${token}`;
         }
     return config;
 }
 
+const resaleApi = axios.create({
+    baseURL: Utils.URLSBases.resaleAPI
+});
+async function intercepterResale(config) {
+    const token = await StorageService.getToken();
+        if(token){
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+    return config;
+}
+
+resaleApi.interceptors.request.use(intercepterResale);
+
 api.interceptors.request.use(intercepter);
-export default api;
+export {
+    api, 
+    resaleApi
+};
