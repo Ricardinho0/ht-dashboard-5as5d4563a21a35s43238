@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Button } from "react-bootstrap";
 import { ContributorService } from "service/contributor"
+import NewContributor from "./newContributor";
 const List = (props) => {
 
     const [user, setUser] = useState();
@@ -36,7 +37,7 @@ const List = (props) => {
 
     useEffect(() => {
         if (user) {
-            GetContributors()
+            // GetContributors()
         }
     }, [user])
 
@@ -52,6 +53,9 @@ const List = (props) => {
                 <div>Clientes</div>
                 <Button onClick={CreateContributor}>Novo cliente</Button>
             </div>
+            <NewContributor 
+                show={true}
+            />
         </div>
     )
 }

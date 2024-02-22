@@ -8,7 +8,6 @@ export class ContributorService {
             }
         })
     }
-
     static async create(data){
         return await resaleApi.post('/contribuinte/revenda/create', data)
     }
