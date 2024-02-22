@@ -13,6 +13,11 @@ export class UserService {
         return await api.post('/user/revenda/create', data)
     }
 
+    static async updateUser(id, data){
+        return await api.put(`/user/edit/${id}`, data)
+    }
+
+
     static async listContributor(id){
         return await api.get('/user/get_all_users_contribuinte', {
             params: {

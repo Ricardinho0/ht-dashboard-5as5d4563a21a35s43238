@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form"
 import { Col, Row, Form, Modal, Button, Card, Spinner } from 'react-bootstrap';
 import validator from "validator";
 import { UserService } from "service/users";
 import { toast } from "../../../../node_modules/sonner/dist";
 import { validarCNPJ } from "utils/validators";
+import { ExternalService } from "service/external";
+import { ContributorService } from "service/contributor";
 
 const NewContributor = (props) => {
 
@@ -12,38 +14,70 @@ const NewContributor = (props) => {
         register,
         handleSubmit,
         getValues,
+        watch,
+        clearErrors,
+        setValue,
+        reset,
         formState: { errors },
     } = useForm()
 
-    const { show = false } = props;
+    const { show = false, onClose, user } = props;
 
     const [loading, setLoading] = useState(false);
+    const [loadingGetCNPJ, setLoadingGetCNPJ] = useState(false);
+
+    const [id_cidade, setid_cidade] = useState(false);
 
     const [cnpj, setCnpj] = useState('')
-    const [fantasia, setFantasia] = useState('')
-    const [razao_social, setRazao_social] = useState('')
-    const [email, setEmail] = useState('')
-    const [cep, setCep] = useState('')
-    const [cidade, setCidade] = useState('')
-    const [logradouro, setLogradouro] = useState('')
-    const [complemento, setComplemento] = useState('')
-    const [bairro, setBairro] = useState('')
-    const [numero, setNumero] = useState('')
-    const [celular, setCelular] = useState('')
-    const [contato, setContato] = useState('')
     const [observacao, setObservacao] = useState('')
 
     const onHide = () => props.onClose();
 
     const handleCreate = (data) => {
         setLoading(true)
-        UserService.createResale(data)
+        ContributorService.create({
+            ...data,
+            observacao,
+            id_cidade,
+            id_revenda: user?.id_revenda,
+            ei: "",
+            cnpj: data?.cnpj?.replace(/\D/g, '', '')
+        })
             .then(() => {
-                toast("Cliente criado com sucesso!");
-                onHide(true);
+                toast("Contribuinte criado com sucesso!");
+                reset();
+                onHide();
             })
             .catch(() => toast.error("Erro ao criar cliente!"))
+            .finally(() => {
+                setLoading(false)
+            })
     }
+
+    const GetCNPJ = (cnpj) => {
+        setLoadingGetCNPJ(true)
+        ExternalService.cnpj(cnpj)
+            .then(({ data }) => {
+                const { razao_social: razao, estabelecimento, socios } = data
+                setValue("razao_social",razao ?? "")
+                setValue("fantasia", estabelecimento?.nome_fantasia ?? "")
+                setValue("email", estabelecimento?.email ?? "")
+                setValue("cep", estabelecimento?.cep ?? "")
+                setValue("cidade", estabelecimento?.cidade?.nome ?? "" )
+                setid_cidade(estabelecimento?.cidade?.id)
+                setValue("logradouro", estabelecimento?.logradouro)
+                setValue("complemento", estabelecimento?.complemento ?? "")
+                setValue("bairro", estabelecimento?.bairro ?? "")
+                setValue("numero", estabelecimento?.numero ?? "")
+                setValue("celular", estabelecimento?.ddd1 + estabelecimento?.telefone1 ?? "")
+                setValue("contato", socios[0]?.nome ?? "")
+            })
+            .catch(() => {
+
+            })
+            .finally(() => setLoadingGetCNPJ(false))
+    }
+
 
 
     return (
@@ -64,7 +98,17 @@ const NewContributor = (props) => {
                                         <Form.Group id="firstName">
                                             <Form.Label>CNPJ</Form.Label>
                                             <Form.Control
+                                                disabled={loadingGetCNPJ}
+                                                value={cnpj}
                                                 {...register("cnpj", {
+                                                    onChange: (e) => {
+                                                        const { value } = e.target
+                                                        const _v = value?.replace(/\D/g, '', '')?.replace("-", '')
+                                                        if (_v?.length === 14 || _v?.length === 13) {
+                                                            GetCNPJ(_v)
+                                                        }
+                                                        setCnpj(value)
+                                                    },
                                                     required: {
                                                         value: true,
                                                         message: "Nome de do cliente requerido!"
@@ -75,7 +119,7 @@ const NewContributor = (props) => {
                                                         }
                                                     }
                                                 })}
-                                                type="number"
+                                                type="text"
                                                 placeholder="Digite o CNPJ" />
                                             <Form.Text className="text-danger">{errors?.cnpj?.message ?? ""}</Form.Text>
                                         </Form.Group>
@@ -88,7 +132,8 @@ const NewContributor = (props) => {
                                                     required: {
                                                         value: true,
                                                         message: "Fantasia requerido."
-                                                    }
+                                                    },
+                                                    setValueAs: value => value
                                                 })}
                                                 type="text"
                                                 placeholder="Fantasia" />
@@ -107,7 +152,7 @@ const NewContributor = (props) => {
                                                         message: "Razão social requerido."
                                                     }
                                                 })}
-                                                type="number"
+                                                type="text"
                                                 placeholder="Razão social" />
                                             <Form.Text className="text-danger">{errors?.razao_social?.message ?? ""}</Form.Text>
                                         </Form.Group>
@@ -142,11 +187,6 @@ const NewContributor = (props) => {
                                                     required: {
                                                         value: true,
                                                         message: "CEP requerido."
-                                                    },
-                                                    validate: (value) => {
-                                                        if (!validator.isPostalCode(value, 'BR')) {
-                                                            return "CEP inválido."
-                                                        }
                                                     }
                                                 })}
                                                 type="number"
@@ -158,9 +198,11 @@ const NewContributor = (props) => {
                                         <Form.Group id="email">
                                             <Form.Label>Cidade</Form.Label>
                                             <Form.Control
+                                                {...register("cidade", {
+
+                                                })}
                                                 disabled
-                                                placeholder="Cidade"
-                                            />
+                                                placeholder="Cidade" />
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -169,14 +211,21 @@ const NewContributor = (props) => {
                                         <Form.Group id="cep">
                                             <Form.Label>Logradouro</Form.Label>
                                             <Form.Control
+                                             {...register("logradouro", {
+
+                                             })}
                                                 type="text"
                                                 placeholder="Logradouro" />
+
                                         </Form.Group>
                                     </Col>
                                     <Col md={6} className="mb-3">
                                         <Form.Group id="email">
                                             <Form.Label>Complemento</Form.Label>
                                             <Form.Control
+                                             {...register("complemento", {
+
+                                             })}
                                                 type="text"
                                                 placeholder="Complemento"
                                             />
@@ -188,14 +237,14 @@ const NewContributor = (props) => {
                                         <Form.Group id="cep">
                                             <Form.Label>Bairro</Form.Label>
                                             <Form.Control
-                                                type="text"
                                                 {...register("bairro", {
                                                     required: {
                                                         value: true,
                                                         message: "Bairro requerido."
                                                     }
                                                 })}
-                                                placeholder="Logradouro" />
+                                                type="text"
+                                                placeholder="Bairro" />
                                             <Form.Text className="text-danger">{errors?.bairro?.message ?? ""}</Form.Text>
                                         </Form.Group>
                                     </Col>
@@ -203,9 +252,11 @@ const NewContributor = (props) => {
                                         <Form.Group id="email">
                                             <Form.Label>Numero</Form.Label>
                                             <Form.Control
+                                                {...register("numero", {
+
+                                                })}
                                                 type="text"
-                                                placeholder="numero"
-                                            />
+                                                placeholder="Número" />
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -225,7 +276,7 @@ const NewContributor = (props) => {
                                                         }
                                                     }
                                                 })}
-                                                type="number"
+                                                type="text"
                                                 placeholder="(00) 9 9999-0000" />
                                             <Form.Text className="text-danger">{errors?.celular?.message ?? ""}</Form.Text>
                                         </Form.Group>
@@ -249,6 +300,8 @@ const NewContributor = (props) => {
                                 <Form.Control
                                     as="textarea"
                                     rows={3}
+                                    value={observacao}
+                                    onChange={(e) => setObservacao(e.target.value)}
                                     placeholder="Observações" />
                                 <div className="mt-3 d-flex justify-content-end">
                                     <Button
@@ -260,6 +313,7 @@ const NewContributor = (props) => {
                                     </Button>
                                 </div>
                             </Form>
+
                         </Card.Body>
                     </Card>
                 </Modal.Body>

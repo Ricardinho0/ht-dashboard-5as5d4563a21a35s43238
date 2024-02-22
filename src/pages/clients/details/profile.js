@@ -25,6 +25,7 @@ const ProfilePage = (props) => {
             <Col md={2} className="d-inline-flex flex-column align-items-start p-4">
                 <div className="position-relative">
                     <Card.Img
+                     style={{ width: 100, height: 100 }}
                         src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDwmG52pVI5JZfn04j9gdtsd8pAGbqjjLswg&usqp=CAU"}
                         className="avatar-xl rounded-circle mx-auto mt-n7 mb-4" />
                     <input type="file" className="h-100 w-100 position-absolute top-0 start-0" style={{ marginTop: '-100%', padding: '50px', display: 'none' }} />
