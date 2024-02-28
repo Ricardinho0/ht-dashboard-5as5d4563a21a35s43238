@@ -10,8 +10,7 @@ import { FaFacebook, FaInstagram, FaYoutube } from "react-icons/fa"
 import { AuthService } from "service/auth";
 import validator from "validator";
 import useAuth from "context/auth";
-import { toast } from '../../../node_modules/sonner/dist/index';
-
+import toast from 'react-hot-toast';
 
 export default () => {
 
@@ -38,12 +37,10 @@ export default () => {
       })
       .catch((err) => {
         if (err?.response?.status === 401) {
-            toast.error("Credenciais invalidas.", {
-              position: 'bottom-center'
-            })
+          toast.error("Credenciais invalidas.")
           return
         }
-        toast.error('Erro ao realizar login, contate o suporte caso o problema persista!')
+        toast.error(err?.response?.data?.detail ?? "Erro ao realizar login, contate o suporte caso o problema persista!")
       })
       .finally(() => setLoading(false))
   }

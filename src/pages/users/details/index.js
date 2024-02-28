@@ -81,12 +81,7 @@ export default function DetailsUsersPage() {
                                 <ProfilePage user={user}/>
                             </Tab.Pane>
                             <Tab.Pane eventKey="profile" className="py-4">
-                                <p>
-                                    Photo booth stumptown tote bag Banksy, elit small batch freegan sed. Craft beer elit seitan exercitation, photo booth et 8-bit kale chips proident chillwave deep v laborum. Aliquip veniam delectus, Marfa eiusmod Pinterest in do umami readymade swag.
-                                </p>
-                                <p>
-                                    Day handsome addition horrible sensible goodness two contempt. Evening for married his account removal. Estimable me disposing of be moonlight cordially curiosity.
-                                </p>
+                               <p>Acesso</p>
                             </Tab.Pane>
                         </Tab.Content>
                     </Col>

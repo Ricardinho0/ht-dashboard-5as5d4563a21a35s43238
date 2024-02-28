@@ -40,17 +40,17 @@ export default function DetailsClientPage() {
                             <FaArrowLeft className="icon icon-xs me-2" />
                         </Button>
                         <span className="fs-5">
-                            {user?.nome_usuario}
+                            {user?.razao_social}
                         </span>
                     </div>
                     <div className="w-100 d-inline-flex align-items-center gap-2">
                         <span className="text-gray-700 fs-6">
-                            <span className="text-gray-500 fs-6">Celular:</span>
-                            {user?.celular}
+                            <span className="text-gray-500 fs-6">Cnpj:</span>
+                            {user?.cnpj}
                         </span>
                         <span className="text-gray-700 pr-1 fs-6">
-                            <span className="text-gray-500"> Whatsapp:</span>
-                            {user?.whatsapp}
+                            <span className="text-gray-500"> Cidade:</span>
+                            {user?.cidade}
                         </span>
                         <span className="text-gray-700 pr-1 fs-6">
                             <span className="text-gray-500">  Email: </span>
@@ -74,11 +74,11 @@ export default function DetailsClientPage() {
                                         Cobranças
                                     </Nav.Link>
                                 </Nav.Item>
-                                <Nav.Item>
+                                {/* <Nav.Item>
                                     <Nav.Link eventKey="data" className="mb-sm-3 mb-md-0">
                                         Dados do cliente
                                     </Nav.Link>
-                                </Nav.Item>
+                                </Nav.Item> */}
                             </Nav>
                         </Col>
                         <Col lg={12}>
@@ -87,12 +87,7 @@ export default function DetailsClientPage() {
                                     <List user={user} teste={user}/>
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="profile" className="py-4">
-                                    <p>
-                                        Photo booth stumptown tote bag Banksy, elit small batch freegan sed. Craft beer elit seitan exercitation, photo booth et 8-bit kale chips proident chillwave deep v laborum. Aliquip veniam delectus, Marfa eiusmod Pinterest in do umami readymade swag.
-                                    </p>
-                                    <p>
-                                        Day handsome addition horrible sensible goodness two contempt. Evening for married his account removal. Estimable me disposing of be moonlight cordially curiosity.
-                                    </p>
+                                    <p>Cobranças</p>
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="data" className="py-4">
                                     <ProfilePage user={user} />

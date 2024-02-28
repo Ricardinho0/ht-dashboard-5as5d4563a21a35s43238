@@ -99,7 +99,7 @@ export default function UsersPage() {
                     <div>
                         <div className="d-inline-flex align-items-center gap-4">
                                 <div>
-                                    10 de 30 Registros
+                                    {users?.length} de {users?.length} Registros
                                 </div>
                             <div>
                                 <Button 

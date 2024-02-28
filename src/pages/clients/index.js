@@ -1,92 +1,85 @@
-
-import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-import { HomeIcon, QuestionMarkCircleIcon } from "@heroicons/react/solid";
-import { Col, Row, Card, Button, Form, Breadcrumb } from 'react-bootstrap';
-import Table from "react-bootstrap-table-next";
-import Pagination, { PaginationListStandalone, PaginationProvider, PaginationTotalStandalone, SizePerPageDropdownStandalone } from "react-bootstrap-table2-paginator";
-import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
-
+import React, { useEffect, useState } from "react"
+import { Breadcrumb, Button, Col, Row } from "react-bootstrap";
+import { ContributorService } from "service/contributor"
+import NewContributor from "./newCliente";
+import Table from "components/table";
 import { Routes } from "routes";
-import { FaPlus, FaPlusCircle } from "react-icons/fa";
 import { IoMenu } from "react-icons/io5";
-import NewClient from "./newClient";
-import { UserService } from "service/users";
+import { useHistory } from "react-router-dom";
 import useAuth from "context/auth";
+import { FaPlusCircle } from "react-icons/fa";
+import { HomeIcon } from "@heroicons/react/solid";
+const List = () => {
 
-export default function ClientsPage() {
+    const { user, search } = useAuth();
+
     const history = useHistory();
-    const { user } = useAuth();
-
-    const [showNewClient, setShowNewClient] = useState(false);
-
-    const [users, setUsers] = useState([]);
 
     const columns = [
-        { dataField: "id", text: "ID", hidden: true },
-        { dataField: "nome_usuario", text: "Nome" },
+        { dataField: "id", text: "ID" },
+        { dataField: "cnpj", text: "CNPJ" },
+        {
+            dataField: "fantasia", text: "Fantasia/Razão social",
+            formatter: (cell, data) => <Col>
+                <Row>{data?.fantasia}</Row>
+                <Row>{data?.razao_social}</Row>
+            </Col>
+        },
         { dataField: "email", text: "Email" },
-        { dataField: "whatsapp", text: "Celular" },
-        { dataField: "nivel", text: "Nível" },
+        {
+            dataField: "cidade", text: "CEP/CIDADE",
+            formatter: (cell, data) => <Col>
+                <Row>{data?.cep}</Row>
+                <Row>{data?.cidade}</Row>
+            </Col>
+        },
+        { dataField: "status", text: "STATUS" },
         {
             dataField: "id", text: "Ação",
-            formatter: (cell, data) => <Button className="p-1" 
-            onClick={() => history.push({
-                pathname: Routes.Clients.details,
-                state: data
-            })}
-            variant=""> <IoMenu size={22} /></Button>, align: 'start'
+            formatter: (cell, data) => <Button className="p-1"
+                onClick={() => history.push({
+                    pathname: Routes.Clients.details,
+                    state: data
+                })}
+                variant=""> <IoMenu size={22} /></Button>, align: 'start'
         },
+
     ];
 
+    const [showNewContributor, setshowNewContributor] = useState(false);
 
-    useEffect(() => {
-        if(user){
-            ListUsers();
-        }
-    },[user])
+    const [contributors, setContributors] = useState([]);
 
-    const ListUsers = () => {
-        UserService.listResales(user?.id_revenda)
-        .then(({ data }) => {
-            setUsers(data)
+    const [pageSize, setPageSize] = useState(100);
+    const [pageNumber, setPageNumber] = useState(1);
+    const [count, setCount] = useState(0);
+
+
+    const GetContributors = () => {
+        ContributorService.contributor({
+            id: user?.id_revenda,
+            page_size: pageSize,
+            page_number: pageNumber,
+            fragment: search ?? undefined
         })
+            .then(({ data }) => {
+                if (data?.contribuintes) {
+                    setContributors(data.contribuintes)
+                    setCount(data?.countfull ?? 0)
+                }
+            })
+            .catch(() => { })
     }
 
-    const customTotal = (from, to, size) => (
-        <div>
-            {from} - {to} de {size} Clientes
-        </div>
-    );
-
-    const customSizePerPage = (props) => {
-        const { options, currentSizePerPage, onSizePerPageChange } = props;
-
-        const onPageChange = (e) => {
-            const page = e.target.value;
-            onSizePerPageChange(page);
+    useEffect(() => {
+        if (user) {
+          
+            GetContributors()
         }
-
-        return (
-            <Row as="label">
-                <Col xs="auto">
-                    <Form.Select value={currentSizePerPage} onChange={onPageChange} className="pe-5">
-                        {[100, 500, 1000, 5000].map(o => (
-                            <option key={o} value={o}>
-                                {o}
-                            </option>
-                        ))}
-                    </Form.Select>
-                </Col>
-                <Col xs="auto" className="d-flex align-items-center ps-0">
-                    Resultado por página
-                </Col>
-            </Row>
-        );
-    };
+    }, [user, pageSize, pageNumber, search])
 
     return (
-        <>
+        <div className="w-100 p-2">
             <div className="py-4">
                 <Breadcrumb className="d-none d-md-inline-block" listProps={{ className: "breadcrumb-dark breadcrumb-transparent" }}>
                     <Breadcrumb.Item><HomeIcon className="icon icon-xs" /></Breadcrumb.Item>
@@ -102,12 +95,12 @@ export default function ClientsPage() {
                     <div>
                         <div className="d-inline-flex align-items-center gap-4">
                                 <div>
-                                    {users?.length} de {users?.length} Registros
+                                    {contributors?.length} de {count} Registros
                                 </div>
                             <div>
                                 <Button 
                                 variant="outline-gray-600" 
-                                className="d-inline-flex align-items-center w-100" onClick={setShowNewClient}>
+                                className="d-inline-flex align-items-center w-100" onClick={setshowNewContributor}>
                                     <FaPlusCircle className="icon icon-xs me-2" /> Adicionar novo cliente
                                 </Button>
                             </div>
@@ -115,60 +108,31 @@ export default function ClientsPage() {
                     </div>
                 </div>
             </div>
-
-            <ToolkitProvider
-                keyField="id"
-                search={true}
+            {/* <div className="d-inline-flex align-items-center justify-content-between w-100 my-2">
+                <div>Clientes</div>
+                <Button onClick={setshowNewContributor}>Novo cliente</Button>
+            </div> */}
+            <Table
+                data={contributors}
+                totalSize={count ?? 0}
                 columns={columns}
-                data={users}
+                onPageSizeChange={(page) => setPageSize(page)}
+                perPage={pageSize}
+                onPageChange={(_page) => setPageNumber(_page)}
+                page={pageNumber}
+            />
+            <NewContributor
+                show={showNewContributor}
+                user={user}
+                onClose={(created) => {
+                    if(created){
+                        GetContributors();
+                    }
+                    setshowNewContributor(false)
+                }}
+            />
+        </div>
+    )
+}
 
-            >
-                {({ baseProps, searchProps }) => (
-                    <PaginationProvider pagination={
-                        Pagination({
-                            custom: true,
-                            showTotal: true,
-                            alwaysShowAllBtns: true,
-                            totalSize: users?.length ?? 0,
-                            withFirstAndLast: false,
-                            paginationTotalRenderer: customTotal,
-                            sizePerPageRenderer: customSizePerPage
-                        })
-                    }>
-                        {({ paginationProps, paginationTableProps }) => (
-                            <Card>
-                                <div className="table-responsive py-4">
-                                    <div className="dataTable-top">
-                                        <div className="dataTable-dropdown">
-                                            <SizePerPageDropdownStandalone
-                                                custom={true}
-                                                {...paginationProps} />
-                                        </div>
-                                        <div className="dataTable-search">
-                                            <PaginationListStandalone {...paginationProps} />
-                                        </div>
-                                    </div>
-
-                                    <Table
-                                        {...baseProps}
-                                        {...paginationTableProps}
-                                        headerWrapperClasses="thead-light"
-                                        bodyClasses="border-0"
-                                        rowClasses="border-bottom"
-                                        classes="table-flush dataTable-table"
-                                    />
-                                </div>
-                            </Card>
-                        )}
-                    </PaginationProvider>
-                )}
-            </ToolkitProvider>
-            <NewClient show={showNewClient} onClose={(created) => {
-                if(created){
-                    ListUsers();
-                }
-                setShowNewClient(null)    
-            }}/>
-        </>
-    );
-};
+export default List;

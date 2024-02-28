@@ -22,6 +22,8 @@ export const AuthProvider = ({ children }) => {
         return current_user?.user ?? null
     })
 
+    const [search, setSearch] = useState("")
+
     const Authenticate = (data) => {
         seToken(data)
         setUser(data?.user)
@@ -33,7 +35,9 @@ export const AuthProvider = ({ children }) => {
         <AuthManager.Provider value={{
             isAuthenticated: !!token,
             Authenticate,
-            user
+            user,
+            search, 
+            setSearch
         }}>
             {children}
         </AuthManager.Provider>

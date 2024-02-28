@@ -13,10 +13,9 @@ import { FaUser } from "react-icons/fa";
 
 export default (props) => {
 
-  const { user } = useAuth();
+  const { user, search, setSearch } = useAuth();
 
   const [notifications, setNotifications] = useState(userNotifications);
-  const allNotificationsRead = notifications.reduce((acc, notif) => acc && notif.read, true);
 
   const toggleContracted = () => props.toggleContracted && props.toggleContracted();
   return (
@@ -37,7 +36,11 @@ export default (props) => {
               <Form.Group id="topbarSearch">
                 <InputGroup className="input-group-merge search-bar">
                   <InputGroup.Text><SearchIcon className="icon icon-xs" /></InputGroup.Text>
-                  <Form.Control type="text" placeholder="Search" />
+                  <Form.Control 
+                  onChange={(event) => setSearch(event.target.value)}
+                  value={search}
+                  type="text" 
+                  placeholder="Search" />
                 </InputGroup>
               </Form.Group>
             </Form>
@@ -68,7 +71,10 @@ export default (props) => {
                 </Dropdown.Item>
                 <Dropdown.Divider as="div" className="my-1" />
 
-                <Dropdown.Item className="d-flex align-items-center">
+                <Dropdown.Item className="d-flex align-items-center" onClick={() => {
+                  localStorage.clear();
+                  window.location.reload()
+                }}>
                   <LogoutIcon className="dropdown-icon text-danger me-2" /> Sair
                 </Dropdown.Item>
               </Dropdown.Menu>
